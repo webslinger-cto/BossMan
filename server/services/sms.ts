@@ -58,6 +58,7 @@ async function sendViaCarrierGateway(to: string, body: string): Promise<SMSResul
 const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
 const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+const twilioMessagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
 
 // SignalWire credentials (fallback)
 const signalwireProjectId = process.env.SIGNALWIRE_PROJECT_ID;
@@ -129,8 +130,12 @@ export async function sendSMS(to: string, body: string): Promise<SMSResult> {
   if (twilioClient && twilioPhoneNumber) {
     try {
       const twilioCallbackUrl = getStatusCallbackUrl("twilio");
+      // Prefer Messaging Service SID for A2P compliance, fall back to direct number
+      const fromParams = twilioMessagingServiceSid 
+        ? { messagingServiceSid: twilioMessagingServiceSid }
+        : { from: twilioPhoneNumber };
       const message = await twilioClient.messages.create({
-        from: twilioPhoneNumber,
+        ...fromParams,
         to: normalizedTo,
         body: body,
         ...(twilioCallbackUrl && { statusCallback: twilioCallbackUrl }),

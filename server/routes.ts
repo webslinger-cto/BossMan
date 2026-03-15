@@ -3034,7 +3034,17 @@ Emergency Chicago Sewer Experts Team
         payload: JSON.stringify({ callSid: CallSid, status: DialCallStatus, from: From, to: To }),
       });
 
-      // Just acknowledge - call is done
+      // MISSED CALL TEXT-BACK: If call wasn't answered, auto-text the caller
+      const missedStatuses = ["no-answer", "busy", "failed", "canceled"];
+      if (From && missedStatuses.includes(DialCallStatus)) {
+        console.log(`[MCTB] Missed call detected (${DialCallStatus}) from ${From} — triggering text-back`);
+        const { handleMissedCall } = await import("./services/missed-call-textback");
+        handleMissedCall(From).catch(err => 
+          console.error("[MCTB] Text-back failed:", err)
+        );
+      }
+
+      // Acknowledge — call is done
       res.type("text/xml").send(`<?xml version="1.0" encoding="UTF-8"?><Response></Response>`);
     } catch (error) {
       console.error("Twilio voice status error:", error);
@@ -3092,6 +3102,16 @@ Emergency Chicago Sewer Experts Team
         method: "POST",
         payload: JSON.stringify({ from: From, to: To, body: Body, messageSid: MessageSid }),
       });
+
+      // Check for MCTB keyword auto-responses first
+      const { getKeywordResponse } = await import("./services/missed-call-textback");
+      const autoResponse = getKeywordResponse(Body);
+      if (autoResponse) {
+        console.log(`[MCTB] Keyword match: "${Body.trim().toUpperCase()}" — sending auto-response`);
+        const { sendSMS: sendAutoReply } = await import("./services/sms");
+        await sendAutoReply(From, autoResponse);
+        // Still forward to office so they know what's happening
+      }
 
       // Forward the SMS to the office number
       const { sendSMS } = await import("./services/sms");
