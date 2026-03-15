@@ -4,7 +4,7 @@
 import { storage } from "../storage";
 import { sendEmail, generateLeadAcknowledgmentEmail, generateAppointmentReminderEmail } from "./email";
 import * as smsService from "./sms";
-import { pushJobToBuilder1 } from "./builder1-integration";
+
 import type { Lead, Job, Technician } from "@shared/schema";
 
 // Contact a lead automatically via email when they come in
@@ -101,10 +101,7 @@ export async function createJobFromLead(
       description: `Job created from lead. Customer confirmed they want an estimate.`,
     });
 
-    // Push job to Builder 1 for SEO content tracking
-    pushJobToBuilder1(job, lead, "job_created").catch(err => {
-      console.error("[Builder1] Failed to push job_created event:", err);
-    });
+    // Builder1 integration removed in BossMan fork
 
     return { success: true, job };
   } catch (error) {
@@ -368,11 +365,7 @@ export async function completeJob(
           });
           console.log(`Created revenue event for job ${jobId} - Revenue: $${totalRevenue}, Total Cost: $${totalCost}, Net Profit: $${netProfit}, Commission: $${commissionAmount}`);
 
-          // Push completed job to Builder 1 for SEO content generation trigger
-          const lead = updatedJob.leadId ? await storage.getLead(updatedJob.leadId) : undefined;
-          pushJobToBuilder1(updatedJob, lead || undefined, "job_completed").catch(err => {
-            console.error("[Builder1] Failed to push job_completed event:", err);
-          });
+          // Builder1 integration removed in BossMan fork
         }
       }
     }

@@ -54,7 +54,7 @@ import {
 import * as smsService from "./services/sms";
 import { dispatchToClosestTechnician } from "./services/dispatch";
 import { generateApplicationPDF, generateComparisonPDF, generateHouseCallProComparisonPDF, generateTestResultsPDF, generateThreeWayComparisonPDF, generateReadmePDF, generateChatSystemPDF } from "./services/pdf-generator";
-import { pushJobToBuilder1 } from "./services/builder1-integration";
+
 
 // Helper: Notify all dispatchers about technician status changes
 async function notifyDispatchersOfStatusChange(
@@ -1416,11 +1416,7 @@ export async function registerRoutes(
         console.error(`Job creation notification failed for job ${job.id}:`, err)
       );
       
-      // Push job to Builder 1 for SEO content tracking
-      const lead = job.leadId ? await storage.getLead(job.leadId) : undefined;
-      pushJobToBuilder1(job, lead, "job_created").catch(err => {
-        console.error(`[Builder1] Failed to push job_created for job ${job.id}:`, err);
-      });
+      // Builder1 integration removed in BossMan fork
       
       res.status(201).json(job);
     } catch (error) {
@@ -5208,11 +5204,7 @@ ${emailContent}
       const job = await storage.createJob(jobData);
       console.log(`[Zapier Create Job] Created job: ${job.id}`);
 
-      // Push job to Builder 1 for SEO content tracking
-      const lead = leadId ? await storage.getLead(leadId) : undefined;
-      pushJobToBuilder1(job, lead, "job_created").catch(err => {
-        console.error(`[Builder1] Failed to push job_created for Zapier job ${job.id}:`, err);
-      });
+      // Builder1 integration removed in BossMan fork
 
       // Send notification to office
       await sendEmail({
