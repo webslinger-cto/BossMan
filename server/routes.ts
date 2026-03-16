@@ -1989,7 +1989,7 @@ Emergency Chicago Sewer Experts Team
       const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say voice="alice">Please hold while we connect you to Chicago Sewer Experts.</Say>
-  <Dial callerId="${To}" timeout="30" action="/api/webhooks/twilio/voice-status">
+  <Dial callerId="${To}" timeout="5" action="/api/webhooks/twilio/voice-status">
     ${FORWARDING_PHONE_NUMBER}
   </Dial>
   <Say voice="alice">We're sorry, no one is available to take your call. Please leave a message after the beep.</Say>
