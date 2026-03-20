@@ -37,6 +37,7 @@ import DispatchChatPage from "@/pages/DispatchChatPage";
 import TechnicianChatPage from "@/pages/TechnicianChatPage";
 import NotFound from "@/pages/not-found";
 import PublicQuotePage from "@/pages/PublicQuotePage";
+import SmsOptInPage from "@/pages/SmsOptInPage";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -373,6 +374,7 @@ function App() {
         <TooltipProvider>
           <Switch>
             <Route path="/quote/:token" component={PublicQuotePage} />
+            <Route path="/sms-opt-in" component={SmsOptInPage} />
           </Switch>
           <Toaster />
         </TooltipProvider>
