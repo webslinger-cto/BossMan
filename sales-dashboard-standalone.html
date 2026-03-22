@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BossMan Sales Dashboard - Standalone</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .sections { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .section h2 { margin-bottom: 15px; color: #1f2937; }
+        .content-section { background: white; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .content-item { background: #f9fafb; padding: 15px; margin: 10px 0; border-radius: 6px; border-left: 4px solid #2563eb; position: relative; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #10b981; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        .copy-btn:hover { background: #059669; }
+        .tab { display: inline-block; padding: 8px 16px; background: #e5e7eb; margin-right: 5px; border-radius: 4px 4px 0 0; cursor: pointer; }
+        .tab.active { background: #2563eb; color: white; }
+        .tab-content { display: none; margin-top: 20px; }
+        .tab-content.active { display: block; }
+        .prospect-form { display: grid; gap: 10px; margin-bottom: 20px; max-width: 400px; }
+        .prospect-form input, .prospect-form select, .prospect-form textarea { padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; }
+        .prospect-form button { background: #2563eb; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; }
+        .prospect-list { background: #f9fafb; padding: 15px; border-radius: 6px; margin-top: 15px; }
+        .apollo-template { background: #fef3c7; padding: 15px; border-radius: 6px; margin: 10px 0; position: relative; }
+        .linkedin-template { background: #dbeafe; padding: 15px; border-radius: 6px; margin: 10px 0; position: relative; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔨 BossMan Sales Dashboard</h1>
+            <p>LinkedIn + Apollo automation for contractor leads - Standalone Version</p>
+        </div>
+
+        <div class="sections">
+            <div class="section">
+                <h2>📝 Prospect Tracking</h2>
+                <div class="prospect-form">
+                    <input type="text" id="name" placeholder="Full Name (e.g., John Smith)">
+                    <input type="text" id="company" placeholder="Company (e.g., Smith Plumbing LLC)">
+                    <input type="email" id="email" placeholder="Email">
+                    <input type="tel" id="phone" placeholder="Phone">
+                    <input type="url" id="linkedin" placeholder="LinkedIn URL">
+                    <select id="source">
+                        <option value="apollo">Apollo</option>
+                        <option value="linkedin">LinkedIn Sales Navigator</option>
+                        <option value="referral">Referral</option>
+                        <option value="website">Website</option>
+                    </select>
+                    <textarea id="notes" placeholder="Notes (industry, pain points, etc.)" rows="2"></textarea>
+                    <button onclick="addProspectLocal()">Add to Local List</button>
+                </div>
+
+                <div class="prospect-list">
+                    <h3>Today's Prospects</h3>
+                    <div id="local-prospects">
+                        <p><em>Add prospects above to track locally</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Quick Stats</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
+                    <div style="background: #dbeafe; padding: 15px; border-radius: 6px;">
+                        <div style="font-size: 2em; font-weight: bold; color: #1e40af;" id="prospects-count">0</div>
+                        <div style="color: #6b7280;">Prospects Added</div>
+                    </div>
+                    <div style="background: #dcfce7; padding: 15px; border-radius: 6px;">
+                        <div style="font-size: 2em; font-weight: bold; color: #15803d;" id="content-generated">12</div>
+                        <div style="color: #6b7280;">Templates Ready</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h3>🎯 Today's Action Items</h3>
+                    <ul style="margin-left: 20px; color: #374151;">
+                        <li>Send 15 LinkedIn connection requests</li>
+                        <li>Follow up with yesterday's connections</li>
+                        <li>Post today's LinkedIn content</li>
+                        <li>Queue Apollo email sequence</li>
+                        <li>Respond to prospect replies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📱 This Week's Content - Ready to Copy & Paste</h2>
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('linkedin')">LinkedIn Posts</div>
+                <div class="tab" onclick="showTab('apollo')">Apollo Email Templates</div>
+                <div class="tab" onclick="showTab('responses')">Response Templates</div>
+            </div>
+            
+            <div id="linkedin-content" class="tab-content active">
+                <div class="linkedin-template">
+                    <h4>Monday - Pain Point Post</h4>
+                    <p id="monday-post">Called 5 contractors this weekend about a kitchen emergency. 3 went to voicemail. 2 answered but were "booked for weeks." 0 had any follow-up system. Guess who got my $2,400 job? The ONE contractor with auto-text-back set up. If you're missing calls, you're missing money. Simple as that. #Contractors #CustomerService #SmallBusiness</p>
+                    <button class="copy-btn" onclick="copyToClipboard('monday-post')">Copy Post</button>
+                </div>
+
+                <div class="linkedin-template">
+                    <h4>Wednesday - Industry Stats</h4>
+                    <p id="wednesday-post">Reality check for home service businesses: 📞 62% of calls to contractors go unanswered 📱 85% of customers won't call back if you miss them 💰 Average missed call = $350 lost revenue 📊 That's $3,500/week walking out the door. The solution? Auto-text-back in under 5 seconds. Technology isn't replacing contractors. It's helping the smart ones capture every opportunity. #ContractorLife #MissedCalls #SmallBizTech</p>
+                    <button class="copy-btn" onclick="copyToClipboard('wednesday-post')">Copy Post</button>
+                </div>
+
+                <div class="linkedin-template">
+                    <h4>Friday - Success Story</h4>
+                    <p id="friday-post">Week wrap-up win: Had a contractor tell me yesterday: "First week with your system, I got 6 text responses from missed calls. 4 turned into jobs. That's $2,400 I would have lost." The setup took 3 minutes. The cost is $49/month. The ROI paid for itself in one day. Sometimes the best business decisions are the simplest ones. #ContractorWins #SmallBusiness #Technology #FridayWin</p>
+                    <button class="copy-btn" onclick="copyToClipboard('friday-post')">Copy Post</button>
+                </div>
+            </div>
+            
+            <div id="apollo-content" class="tab-content">
+                <div class="apollo-template">
+                    <h4>Apollo Email #1 - Problem Recognition</h4>
+                    <p><strong>Subject:</strong> Quick question about missed calls</p>
+                    <div style="margin-top: 10px; font-family: monospace; background: white; padding: 10px; border-radius: 4px;">
+Hi {{first_name}},<br><br>
+
+I was calling local contractors this weekend about a kitchen emergency.<br><br>
+
+Out of 5 businesses I called:<br>
+- 3 went to voicemail<br>
+- 2 answered but were "booked for weeks"<br>
+- 0 had any system to follow up<br><br>
+
+Guess who got my $2,400 job? The ONE guy with an auto-text system.<br><br>
+
+Built something similar for contractors like {{company}}. Takes 2 minutes to set up, costs $49/month.<br><br>
+
+Worth a quick look? 14-day free trial, no credit card needed.<br><br>
+
+webslingerai.com<br><br>
+
+Best,<br>
+Rashad<br>
+WebSlingerAI
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('apollo-template-1')">Copy Template</button>
+                </div>
+
+                <div class="apollo-template">
+                    <h4>Apollo Email #2 - Social Proof</h4>
+                    <p><strong>Subject:</strong> {{first_name}} - Chicago contractor's results</p>
+                    <div id="apollo-template-2" style="margin-top: 10px; font-family: monospace; background: white; padding: 10px; border-radius: 4px;">
+Hi {{first_name}},<br><br>
+
+Quick follow-up on the missed-call solution I mentioned.<br><br>
+
+Just got this text from a plumber in Chicago:<br>
+"First week with your system - 6 callbacks from missed calls, 4 became jobs. $2,400 I would've lost."<br><br>
+
+The math is simple:<br>
+- Miss 10 calls/week<br>
+- Lose 8 potential customers (85% won't call back)<br>
+- Average job: $350<br>
+- Lost revenue: $2,800/week<br><br>
+
+Our tool: $49/month = $1.63/day<br><br>
+
+{{first_name}}, even if it only saves you 1 job per month, it pays for itself 7x over.<br><br>
+
+Free 14-day trial: webslingerai.com<br>
+(Setup takes 2 minutes)<br><br>
+
+Rashad
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('apollo-template-2')">Copy Template</button>
+                </div>
+            </div>
+
+            <div id="responses-content" class="tab-content">
+                <div class="apollo-template">
+                    <h4>Response: Interested in Learning More</h4>
+                    <div id="response-interested" style="font-family: monospace; background: white; padding: 10px; border-radius: 4px;">
+Perfect! Here's exactly how it works:<br><br>
+
+1. Customer calls your business number<br>
+2. If you don't answer in 30 seconds → automatic text fires<br>
+3. Text includes your services, hours, emergency contact, scheduling link<br>
+4. Customer can respond directly or book online<br><br>
+
+Takes 2 minutes to set up, works with your existing phone number.<br><br>
+
+Want me to show you a quick demo? We can hop on a 5-minute call, or I can send you a video walkthrough.<br><br>
+
+Either way, there's a 14-day free trial so you can test it risk-free.<br><br>
+
+What works better for your schedule?
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('response-interested')">Copy Response</button>
+                </div>
+
+                <div class="apollo-template">
+                    <h4>Response: Price Objection</h4>
+                    <div id="response-price" style="font-family: monospace; background: white; padding: 10px; border-radius: 4px;">
+I totally get it. Let me put it in perspective:<br><br>
+
+Our tool costs $49/month = $1.63/day.<br><br>
+
+If you miss just ONE service call per month (average $350), you've lost 7x what the tool costs.<br><br>
+
+Most contractors using this save 8-12 missed calls per week. That's potentially $2,000+ in recovered revenue monthly.<br><br>
+
+The 14-day free trial lets you see the actual results with your real customers before you pay anything. If it doesn't save you at least one job, cancel it.<br><br>
+
+Worth testing for two weeks?
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('response-price')">Copy Response</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let localProspects = JSON.parse(localStorage.getItem('bossman-prospects') || '[]');
+        
+        function addProspectLocal() {
+            const prospect = {
+                id: Date.now(),
+                name: document.getElementById('name').value,
+                company: document.getElementById('company').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                linkedin: document.getElementById('linkedin').value,
+                source: document.getElementById('source').value,
+                notes: document.getElementById('notes').value,
+                added: new Date().toLocaleDateString(),
+                status: 'New'
+            };
+
+            if (!prospect.name) {
+                alert('Please enter at least a name');
+                return;
+            }
+
+            localProspects.push(prospect);
+            localStorage.setItem('bossman-prospects', JSON.stringify(localProspects));
+            
+            // Clear form
+            document.querySelectorAll('.prospect-form input, .prospect-form textarea').forEach(input => input.value = '');
+            document.getElementById('source').value = 'apollo';
+            
+            updateProspectsList();
+            updateStats();
+        }
+
+        function updateProspectsList() {
+            const container = document.getElementById('local-prospects');
+            if (localProspects.length === 0) {
+                container.innerHTML = '<p><em>Add prospects above to track locally</em></p>';
+                return;
+            }
+
+            container.innerHTML = localProspects.map(p => `
+                <div style="background: white; padding: 10px; margin: 5px 0; border-radius: 4px; border-left: 3px solid #2563eb;">
+                    <strong>${p.name}</strong> - ${p.company || 'No company'}
+                    <br><small style="color: #6b7280;">${p.source} • ${p.added} • ${p.status}</small>
+                    ${p.notes ? `<br><small>${p.notes}</small>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('prospects-count').textContent = localProspects.length;
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent || element.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Show feedback
+                const button = element.parentElement.querySelector('.copy-btn');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#059669';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#10b981';
+                }, 2000);
+            }).catch(() => {
+                alert('Content copied to clipboard!');
+            });
+        }
+
+        function showTab(tabName) {
+            // Remove active class from all tabs and content
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-content').classList.add('active');
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            updateProspectsList();
+            updateStats();
+        };
+
+        // Generate fresh content button
+        function refreshContent() {
+            const mondayPosts = [
+                "Called 5 contractors this weekend about an emergency. 3 went to voicemail. 2 answered but were 'booked for weeks.' 0 had any follow-up system. Guess who got my $2,400 job? The ONE guy with auto-text-back set up. If you're missing calls, you're missing money. Simple as that. #Contractors #CustomerService #SmallBusiness",
+                "Weekend emergency: burst pipe, 9pm Saturday. Called 7 plumbers. 6 went straight to voicemail. 1 answered, said 'call back Monday.' Result? I fixed it myself and learned plumbing on YouTube. How much revenue are you losing to DIY tutorials? #EmergencyService #Plumbing",
+                "Reality check: Your phone rings at 7pm. You're covered in mud, hands full of tools. Customer hangs up. They call the next contractor on Google. That's $350 walking out the door. Every. Single. Time. Auto-text-back fixes this. #ContractorLife #MissedOpportunities"
+            ];
+
+            document.getElementById('monday-post').textContent = mondayPosts[Math.floor(Math.random() * mondayPosts.length)];
+        }
+    </script>
+</body>
+</html>
