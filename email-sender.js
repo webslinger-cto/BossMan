@@ -184,7 +184,7 @@ async function sendWeeklyEmail(recipient = 'cto@webslingerai.com') {
     }
 
     // Configure email transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
             user: emailUser,
