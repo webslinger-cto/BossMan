@@ -5,11 +5,15 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "send-email": "node email-sender.js",
+    "setup-cron": "node setup-automation.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "nodemailer": "^6.9.0",
+    "node-cron": "^3.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
