@@ -7,7 +7,9 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "send-email": "node email-sender.js",
-    "setup-cron": "node setup-automation.js"
+    "setup-cron": "node setup-automation.js",
+    "test-email": "node quick-test.js",
+    "instant-test": "node instant-test.js"
   },
   "dependencies": {
     "express": "^4.18.2",
