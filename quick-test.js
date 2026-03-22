@@ -7,7 +7,7 @@ const { sendWeeklyEmail } = require('./email-sender');
 
 console.log('🔨 BossMan Sales Quick Test');
 console.log('⏰ Email will be sent in 5 minutes...');
-console.log('📧 Recipient: cto@webslingerai.com');
+console.log('📧 Recipient: rabdulsalaam@gmail.com');
 console.log('');
 
 // Check email credentials
@@ -37,7 +37,7 @@ const countdown = setInterval(() => {
             sendWeeklyEmail().then(success => {
                 if (success) {
                     console.log('✅ Test email sent successfully!');
-                    console.log('📧 Check your inbox: cto@webslingerai.com');
+                    console.log('📧 Check your inbox: rabdulsalaam@gmail.com');
                     console.log('');
                     console.log('🎯 If you received the email, the automation is working perfectly!');
                 } else {

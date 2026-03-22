@@ -172,7 +172,7 @@ function generateEmailHTML(content) {
 </html>`;
 }
 
-async function sendWeeklyEmail(recipient = 'cto@webslingerai.com') {
+async function sendWeeklyEmail(recipient = 'rabdulsalaam@gmail.com') {
     // Check for email credentials
     const emailUser = process.env.EMAIL_USER || 'cto@webslingerai.com';
     const emailPass = process.env.EMAIL_PASSWORD;

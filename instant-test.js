@@ -25,7 +25,7 @@ console.log('🚀 Sending INSTANT test email...');
 sendWeeklyEmail().then(success => {
     if (success) {
         console.log('✅ INSTANT email sent successfully!');
-        console.log('📧 Check your inbox: cto@webslingerai.com');
+        console.log('📧 Check your inbox: rabdulsalaam@gmail.com');
         console.log('');
         
         // Schedule second email in 5 minutes
