@@ -1,0 +1,17 @@
+{
+  "name": "bossman-sales-automation",
+  "version": "1.0.0",
+  "description": "Automated sales dashboard for BossMan contractor leads",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
