@@ -1,6 +1,5 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { registerSEORoutes } from "./seo-routes";
 import { storage } from "./storage";
 import {
   insertJobSchema,
@@ -2704,9 +2703,6 @@ Emergency Chicago Sewer Experts Team
       res.status(500).json({ error: "Failed to forward SMS" });
     }
   });
-
-  // Register SEO routes
-  registerSEORoutes(app);
 
   return httpServer;
 }
